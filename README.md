@@ -2,13 +2,29 @@
 
 Simple template engine written in Java
 
+## Reference
+
+```java
+import com.ajlopez.templie;
+```
+
 ## Usage
 
-TBD
+```java
+Template template = Template.compile("Hello, ${name}!");
+Map<String, Object> model = new HashMap<String, Object>();
+model.put("name", "World");
+
+String result = template.run(model); // "Hello, World!"
+```
 
 ## Samples
 
 TBD
+
+## Versions
+
+- 0.0.1: Replace variables
 
 ## License
 
