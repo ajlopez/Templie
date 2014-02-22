@@ -13,7 +13,25 @@ public class Template {
 
 	public static Template compile(String text) {
 		List<Step> steps = new ArrayList<Step>();
-		steps.add(new StringStep(text));
+		
+		while (true) {
+			int position = text.indexOf("${");
+			
+			if (position < 0) {
+				steps.add(new StringStep(text));
+				break;
+			}
+			
+			steps.add(new StringStep(text.substring(0, position)));
+			
+			int position2 = text.indexOf("}", position);
+			
+			String name = text.substring(position + 2, position2);
+			
+			steps.add(new VariableStep(name));
+			
+			text = text.substring(position2 + 1);
+		}
 		
 		return new Template(steps);
 	}
