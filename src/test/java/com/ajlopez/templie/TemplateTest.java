@@ -49,4 +49,17 @@ public class TemplateTest {
 		assertNotNull(result);
 		assertEquals("Hi, World!", result);
 	}
+
+	@Test
+	public void compileAndRunWithTwoVariablesWithSpaces() {
+		Template template = Template.compile("${  hello  }, ${  name }!");
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("name", "World");
+		model.put("hello", "Hi");
+		
+		String result = template.run(model);
+		
+		assertNotNull(result);
+		assertEquals("Hi, World!", result);
+	}
 }
