@@ -1,6 +1,6 @@
 # Templie
 
-Simple template engine in Java
+Simple template engine written in Java
 
 ## Usage
 
