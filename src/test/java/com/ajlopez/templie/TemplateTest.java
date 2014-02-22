@@ -38,6 +38,18 @@ public class TemplateTest {
 	}
 
 	@Test
+	public void compileAndRunWithOneEscapedVariable() {
+		Template template = Template.compile("Hello, \\${name}!");
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("name", "World");
+		
+		String result = template.run(model);
+		
+		assertNotNull(result);
+		assertEquals("Hello, ${name}!", result);
+	}
+
+	@Test
 	public void compileAndRunWithTwoVariables() {
 		Template template = Template.compile("${hello}, ${name}!");
 		Map<String, Object> model = new HashMap<String, Object>();

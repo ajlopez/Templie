@@ -22,6 +22,16 @@ class Compiler {
 			if (text.charAt(k + 1) != '{')
 				continue;
 			
+			if (k > 0 && text.charAt(k - 1) == '\\') {
+				if (k - 1> from) {
+					steps.add(new StringStep(text.substring(from, k - 1)));
+				}
+				
+				from = k;
+				
+				continue;
+			}
+			
 			if (k > from) {
 				steps.add(new StringStep(text.substring(from, k)));
 			}
