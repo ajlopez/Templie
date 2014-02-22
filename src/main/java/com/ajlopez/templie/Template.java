@@ -1,19 +1,29 @@
 package com.ajlopez.templie;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 public class Template {
-	private String text;
+	private List<Step> steps;
 	
-	public Template(String text) {
-		this.text = text;
+	public Template(List<Step> steps) {
+		this.steps = steps;
 	}
 
 	public static Template compile(String text) {
-		return new Template(text);
+		List<Step> steps = new ArrayList<Step>();
+		steps.add(new StringStep(text));
+		
+		return new Template(steps);
 	}
 	
-	public String run(Object object) {
-		// TODO Auto-generated method stub
-		return this.text;
+	public String run(Map<String, Object> model) {
+		StringBuffer buffer = new StringBuffer();
+		
+		for (Step step: this.steps)
+			buffer.append(step.run(model));
+		
+		return buffer.toString();
 	}
-
 }

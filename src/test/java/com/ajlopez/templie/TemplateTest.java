@@ -2,6 +2,9 @@ package com.ajlopez.templie;
 
 import static org.junit.Assert.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.Test;
 
 public class TemplateTest {
@@ -17,5 +20,15 @@ public class TemplateTest {
 		String result = template.run(null);		
 		assertNotNull(result);
 		assertEquals("foo", result);
+	}
+
+	@Test
+	public void compileAndRunWithOneVariable() {
+		Template template = Template.compile("Hello, ${name}!");
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("name", "World");
+		String result = template.run(null);		
+		assertNotNull(result);
+		assertEquals("Hello, World!", result);
 	}
 }
