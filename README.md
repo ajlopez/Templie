@@ -11,10 +11,14 @@ import com.ajlopez.templie;
 ## Usage
 
 ```java
+// Compile the template
 Template template = Template.compile("Hello, ${name}!");
+
+// Setup the model
 Map<String, Object> model = new HashMap<String, Object>();
 model.put("name", "World");
 
+// Run the template with model
 String result = template.run(model); // "Hello, World!"
 ```
 
