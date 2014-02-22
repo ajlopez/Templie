@@ -13,25 +13,34 @@ public class Template {
 
 	public static Template compile(String text) {
 		List<Step> steps = new ArrayList<Step>();
+		int l = text.length();
+		int from = 0;
 		
-		while (true) {
-			int position = text.indexOf("${");
+		for (int k = 0; k < l - 1; k++) {
+			if (text.charAt(k) != '$')
+				continue;
+			if (text.charAt(k + 1) != '{')
+				continue;
 			
-			if (position < 0) {
-				steps.add(new StringStep(text));
-				break;
+			if (k > from) {
+				steps.add(new StringStep(text.substring(from, k)));
 			}
 			
-			steps.add(new StringStep(text.substring(0, position)));
+			from = k + 2;
 			
-			int position2 = text.indexOf("}", position);
+			for (k++; k < l; k++)
+				if (text.charAt(k) == '}')
+					break;
 			
-			String name = text.substring(position + 2, position2);
+			String name = text.substring(from, k).trim();
 			
 			steps.add(new VariableStep(name));
 			
-			text = text.substring(position2 + 1);
+			from = k + 1; 
 		}
+		
+		if (l > from)
+			steps.add(new StringStep(text.substring(from, l)));
 		
 		return new Template(steps);
 	}
