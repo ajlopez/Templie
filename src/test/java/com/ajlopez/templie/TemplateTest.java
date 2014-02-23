@@ -86,4 +86,15 @@ public class TemplateTest {
 		assertNotNull(result);
 		assertEquals("Adam\r\n", result);
 	}
+
+	@Test
+	public void compileIfWithFalseCondition() throws CompileException {
+		Template template = Template.compile("@if name\r\n${name}\r\n@end");
+		Map<String, Object> model = new HashMap<String, Object>();
+		
+		String result = template.run(model);
+		
+		assertNotNull(result);
+		assertEquals("", result);
+	}
 }

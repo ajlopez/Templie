@@ -87,7 +87,7 @@ class Compiler {
 		else
 			this.from = k + 1;
 		
-		String[] words = cmdtext.split("\\s");
+		String[] words = cmdtext.split("\\s+");
 		
 		if (words[0].equals("end"))
 			return true;
@@ -97,7 +97,7 @@ class Compiler {
 		
 		Template template = this.compile(this.from, new ArrayList<Step>(), true);
 		
-		steps.add(new TemplateStep(template));
+		steps.add(new IfStep(words[1], template));
 		
 		return false;
 	}
