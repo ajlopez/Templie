@@ -9,14 +9,14 @@ import org.junit.Test;
 
 public class TemplateTest {
 	@Test
-	public void compileSimpleString() {
+	public void compileSimpleString() throws CompileException {
 		Template template = Template.compile("foo");
 		
 		assertNotNull(template);
 	}
 
 	@Test
-	public void compileAndRunSimpleString() {
+	public void compileAndRunSimpleString() throws CompileException {
 		Template template = Template.compile("foo");
 		
 		String result = template.run(null);
@@ -26,7 +26,7 @@ public class TemplateTest {
 	}
 
 	@Test
-	public void compileAndRunWithOneVariable() {
+	public void compileAndRunWithOneVariable() throws CompileException {
 		Template template = Template.compile("Hello, ${name}!");
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("name", "World");
@@ -38,7 +38,7 @@ public class TemplateTest {
 	}
 
 	@Test
-	public void compileAndRunWithOneEscapedVariable() {
+	public void compileAndRunWithOneEscapedVariable() throws CompileException {
 		Template template = Template.compile("Hello, \\${name}!");
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("name", "World");
@@ -50,7 +50,7 @@ public class TemplateTest {
 	}
 
 	@Test
-	public void compileAndRunWithTwoVariables() {
+	public void compileAndRunWithTwoVariables() throws CompileException {
 		Template template = Template.compile("${hello}, ${name}!");
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("name", "World");
@@ -63,7 +63,7 @@ public class TemplateTest {
 	}
 
 	@Test
-	public void compileAndRunWithTwoVariablesWithSpaces() {
+	public void compileAndRunWithTwoVariablesWithSpaces() throws CompileException {
 		Template template = Template.compile("${  hello  }, ${  name }!");
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("name", "World");
@@ -73,5 +73,17 @@ public class TemplateTest {
 		
 		assertNotNull(result);
 		assertEquals("Hi, World!", result);
+	}
+
+	@Test
+	public void compileIfWithTrueCondition() throws CompileException {
+		Template template = Template.compile("@if name\r\n${name}\r\n@end");
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("name", "Adam");
+		
+		String result = template.run(model);
+		
+		assertNotNull(result);
+		assertEquals("Adam\r\n", result);
 	}
 }

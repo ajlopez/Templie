@@ -11,7 +11,7 @@ public class Template {
 		this.steps = steps;
 	}
 
-	public static Template compile(String text) {
+	public static Template compile(String text) throws CompileException {
 		Compiler compiler = new Compiler(text);
 		return compiler.compile();
 	}
