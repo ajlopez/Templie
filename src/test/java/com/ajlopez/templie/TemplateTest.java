@@ -5,9 +5,14 @@ import static org.junit.Assert.*;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 public class TemplateTest {
+	@Rule
+	public ExpectedException expectedEx = ExpectedException.none();
+	
 	@Test
 	public void compileSimpleString() throws CompileException {
 		Template template = Template.compile("foo");
@@ -88,13 +93,47 @@ public class TemplateTest {
 	}
 
 	@Test
+	public void compileIfWithSpaces() throws CompileException {
+		Template template = Template.compile("   @if    name\r\n${name}\r\n   @end");
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("name", "Adam");
+		
+		String result = template.run(model);
+		
+		assertNotNull(result);
+		assertEquals("Adam\r\n", result);
+	}
+
+	@Test
 	public void compileIfWithFalseCondition() throws CompileException {
-		Template template = Template.compile("@if name\r\n${name}\r\n@end");
+	    Template template = Template.compile("@if name\r\n${name}\r\n@end");
 		Map<String, Object> model = new HashMap<String, Object>();
 		
 		String result = template.run(model);
 		
 		assertNotNull(result);
 		assertEquals("", result);
+	}
+
+	@Test
+	public void raiseIfNoMissingEnd() throws CompileException {
+		expectedEx.expect(CompileException.class);
+	    expectedEx.expectMessage("Missing end command");
+	    
+		Template template = Template.compile("@if name\r\n${name}\r\n");
+		Map<String, Object> model = new HashMap<String, Object>();
+		
+		template.run(model);		
+	}
+
+	@Test
+	public void raiseIfInvalidCommand() throws CompileException {
+		expectedEx.expect(CompileException.class);
+	    expectedEx.expectMessage("Invalid command");
+	    
+		Template template = Template.compile("@of name\r\n${name}\r\n@end");
+		Map<String, Object> model = new HashMap<String, Object>();
+		
+		template.run(model);		
 	}
 }
