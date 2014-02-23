@@ -129,9 +129,31 @@ public class TemplateTest {
 	@Test
 	public void raiseIfInvalidCommand() throws CompileException {
 		expectedEx.expect(CompileException.class);
-	    expectedEx.expectMessage("Invalid command");
+	    expectedEx.expectMessage("Unknown command 'of'");
 	    
 		Template template = Template.compile("@of name\r\n${name}\r\n@end");
+		Map<String, Object> model = new HashMap<String, Object>();
+		
+		template.run(model);		
+	}
+
+	@Test
+	public void raiseIfInvalidIfCommandWithAdditionalArgument() throws CompileException {
+		expectedEx.expect(CompileException.class);
+	    expectedEx.expectMessage("Invalid if command");
+	    
+		Template template = Template.compile("@if name1 name2\r\n${name}\r\n@end");
+		Map<String, Object> model = new HashMap<String, Object>();
+		
+		template.run(model);		
+	}
+
+	@Test
+	public void raiseIfInvalidIfCommandWithNoArgument() throws CompileException {
+		expectedEx.expect(CompileException.class);
+	    expectedEx.expectMessage("Invalid if command");
+	    
+		Template template = Template.compile("@if\r\n${name}\r\n@end");
 		Map<String, Object> model = new HashMap<String, Object>();
 		
 		template.run(model);		

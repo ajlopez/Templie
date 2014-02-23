@@ -93,7 +93,10 @@ class Compiler {
 			return true;
 		
 		if (!words[0].equals("if"))
-			throw new CompileException("Invalid command");
+			throw new CompileException("Unknown command '" + words[0] + "'");
+		
+		if (words.length != 2)
+			throw new CompileException("Invalid if command");
 		
 		Template template = this.compile(this.from, new ArrayList<Step>(), true);
 		
