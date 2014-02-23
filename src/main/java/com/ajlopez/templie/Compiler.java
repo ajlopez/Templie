@@ -16,9 +16,7 @@ class Compiler {
 	
 	Template compile() {
 		for (int k = 0; k < this.length - 1; k++) {
-			if (this.text.charAt(k) != '$')
-				continue;
-			if (this.text.charAt(k + 1) != '{')
+			if (!this.isExpression(k))
 				continue;
 			
 			if (k > 0 && text.charAt(k - 1) == '\\') {
@@ -52,5 +50,30 @@ class Compiler {
 			this.steps.add(new StringStep(this.text.substring(this.from, this.length)));
 		
 		return new Template(this.steps);		
+	}
+	
+	private boolean isExpression(int position) {
+		char ch = this.text.charAt(position);
+		
+		if (ch != '$')
+			return false;
+		
+		if (position + 1 >= this.length)
+			return false;
+		
+		if (text.charAt(position + 1) != '{')
+			return false;
+		
+		if (position > 0 && text.charAt(position - 1) == '\\') {
+			if (position - 1> from) {
+				this.steps.add(new StringStep(this.text.substring(this.from, position - 1)));
+			}
+			
+			this.from = position;
+			
+			return false;
+		}
+		
+		return true;
 	}
 }
