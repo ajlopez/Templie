@@ -19,16 +19,6 @@ class Compiler {
 			if (!this.isExpression(k))
 				continue;
 			
-			if (k > 0 && text.charAt(k - 1) == '\\') {
-				if (k - 1> from) {
-					this.steps.add(new StringStep(this.text.substring(this.from, k - 1)));
-				}
-				
-				this.from = k;
-				
-				continue;
-			}
-			
 			if (k > this.from) {
 				this.steps.add(new StringStep(this.text.substring(this.from, k)));
 			}
