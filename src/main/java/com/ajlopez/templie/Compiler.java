@@ -95,12 +95,14 @@ class Compiler {
 		if (!words[0].equals("if"))
 			throw new CompileException("Unknown command '" + words[0] + "'");
 		
-		if (words.length != 2)
+		boolean negated = words.length == 3 && words[1].equals("not");
+		
+		if (!negated && words.length != 2)
 			throw new CompileException("Invalid if command");
 		
 		Template template = this.compile(this.from, new ArrayList<Step>(), true);
 		
-		steps.add(new IfStep(words[1], template));
+		steps.add(new IfStep(words[1], template, negated));
 		
 		return false;
 	}

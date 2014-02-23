@@ -116,6 +116,17 @@ public class TemplateTest {
 	}
 
 	@Test
+	public void compileIfWithNegatedCondition() throws CompileException {
+	    Template template = Template.compile("@if not name\r\nHello\r\n@end");
+		Map<String, Object> model = new HashMap<String, Object>();
+		
+		String result = template.run(model);
+		
+		assertNotNull(result);
+		assertEquals("Hello\r\n", result);
+	}
+
+	@Test
 	public void raiseIfNoMissingEnd() throws CompileException {
 		expectedEx.expect(CompileException.class);
 	    expectedEx.expectMessage("Missing end command");
