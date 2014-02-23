@@ -16,30 +16,34 @@ class Compiler {
 	
 	Template compile() {
 		for (int k = 0; k < this.length - 1; k++) {
-			if (!this.isExpression(k))
+			if (this.isExpression(k)) {
+				this.processExpression(k);
+				k = this.from - 1;
 				continue;
-			
-			if (k > this.from) {
-				this.steps.add(new StringStep(this.text.substring(this.from, k)));
 			}
-			
-			this.from = k + 2;
-			
-			for (k++; k < this.length; k++)
-				if (this.text.charAt(k) == '}')
-					break;
-			
-			String name = this.text.substring(from, k).trim();
-			
-			this.steps.add(new VariableStep(name));
-			
-			this.from = k + 1; 
 		}
 		
 		if (this.length > this.from)
 			this.steps.add(new StringStep(this.text.substring(this.from, this.length)));
 		
 		return new Template(this.steps);		
+	}
+	
+	private void processExpression(int position) {
+		if (position > this.from)
+			this.steps.add(new StringStep(this.text.substring(this.from, position)));
+		
+		this.from = position + 2;
+		
+		for (position++; position < this.length; position++)
+			if (this.text.charAt(position) == '}')
+				break;
+		
+		String name = this.text.substring(from, position).trim();
+		
+		this.steps.add(new VariableStep(name));
+		
+		this.from = position + 1; 		
 	}
 	
 	private boolean isExpression(int position) {
