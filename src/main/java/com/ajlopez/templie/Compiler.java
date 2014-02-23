@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 class Compiler {
-	String text;
-	int length;
+	private String text;
+	private int length;
+	private List<Step> steps = new ArrayList<Step>();
+	private int from = 0;
 	
 	Compiler(String text) {
 		this.text = text;
@@ -13,45 +15,42 @@ class Compiler {
 	}
 	
 	Template compile() {
-		List<Step> steps = new ArrayList<Step>();
-		int from = 0;
-		
 		for (int k = 0; k < this.length - 1; k++) {
-			if (text.charAt(k) != '$')
+			if (this.text.charAt(k) != '$')
 				continue;
-			if (text.charAt(k + 1) != '{')
+			if (this.text.charAt(k + 1) != '{')
 				continue;
 			
 			if (k > 0 && text.charAt(k - 1) == '\\') {
 				if (k - 1> from) {
-					steps.add(new StringStep(text.substring(from, k - 1)));
+					this.steps.add(new StringStep(this.text.substring(this.from, k - 1)));
 				}
 				
-				from = k;
+				this.from = k;
 				
 				continue;
 			}
 			
-			if (k > from) {
-				steps.add(new StringStep(text.substring(from, k)));
+			if (k > this.from) {
+				this.steps.add(new StringStep(this.text.substring(this.from, k)));
 			}
 			
-			from = k + 2;
+			this.from = k + 2;
 			
 			for (k++; k < this.length; k++)
-				if (text.charAt(k) == '}')
+				if (this.text.charAt(k) == '}')
 					break;
 			
-			String name = text.substring(from, k).trim();
+			String name = this.text.substring(from, k).trim();
 			
-			steps.add(new VariableStep(name));
+			this.steps.add(new VariableStep(name));
 			
-			from = k + 1; 
+			this.from = k + 1; 
 		}
 		
-		if (this.length > from)
-			steps.add(new StringStep(text.substring(from, this.length)));
+		if (this.length > this.from)
+			this.steps.add(new StringStep(this.text.substring(this.from, this.length)));
 		
-		return new Template(steps);		
+		return new Template(this.steps);		
 	}
 }
