@@ -1,6 +1,6 @@
 # Templie
 
-Simple template engine written in Java
+Simple template engine written in Java, without dependencies, written using TDD workflow.
 
 ## Reference
 
